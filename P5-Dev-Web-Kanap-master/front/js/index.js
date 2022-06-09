@@ -17,11 +17,12 @@ const productDisplay = async () => {
     <a ${product._id} href="./product.html" class="items">
         <article>
             <img src="${product.imageUrl}" alt="${product.altTxt}"/>
-            <h3 class="productName">${product.name.toUpperCase()}</h3>
+            <h3 class="productName">${product.name}</h3>
+            <p class="productDescription">${product.description.toUpperCase()}</p>
         </article>
     </a>
     `,
-    );
+    ).join("");
 };
 
 
