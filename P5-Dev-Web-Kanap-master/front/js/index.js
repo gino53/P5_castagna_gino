@@ -12,19 +12,18 @@ const fetchProduct = async () => {
 const productDisplay = async () => {
     await fetchProduct ();
 
-    document.getElementById("items").innerHTML = productData.map(
-        (product) => `
-    <a ${product._id} href="./product.html">
-        <article>
-            <img src="${product.imageUrl}" alt="${product.altTxt}"/>
-            <h3 class="productName">${product.name}</h3>
-            <p class="productDescription">${product.description.toUpperCase()}</p>
-        </article>
-    </a>
-    `,
+    document.getElementById("items").innerHTML = productData.map
+    ((product) => 
+        `
+            <a id="${product._id}" href="./product.html?${product._id}">
+                <article>
+                    <img src="${product.imageUrl}" alt="${product.altTxt}"/>
+                    <h3 class="productName">${product.name}</h3>
+                    <p class="productDescription">${product.description.toUpperCase()}</p>
+                </article>
+            </a>
+        `,
     ).join("");
 };
-
-
 
 productDisplay();
