@@ -13,11 +13,13 @@ const productDisplay = async () => {
     await fetchProduct ();
 
     document.getElementById("items").innerHTML = productData.map(
-        (meuble) => `
-    <div id="card${product._id}" class="item item__img item__content">
-    <h3 class="productName">${product.name.toUpperCase()}</h3>
-
-    </div>
+        (product) => `
+    <a ${product._id} href="./product.html" class="items">
+        <article>
+            <img src="${product.imageUrl}" alt="${product.altTxt}"/>
+            <h3 class="productName">${product.name.toUpperCase()}</h3>
+        </article>
+    </a>
     `,
     );
 };
