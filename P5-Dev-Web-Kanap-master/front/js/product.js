@@ -1,15 +1,17 @@
 const product = window.location.search.split("?").join("");
-
 console.log(product);
 
-let productData = [];
+const productDetail = [];
 
 const fetchProduct = async () => {
-    await fetch('http://localhost:3000/api/products/${product}')
-    .then((res) => res.json(),)
-    .then((promise) => {
-        console.log(promise);
-    });
-}
+    await fetch(`http://localhost:3000/api/products/${product}`)
+    .then((res) => res.json());
+    };
 
-fetchProduct();
+const productDisplay = async () => {
+    await fetchProduct();
+
+    document.getElementById("")
+};
+
+productDisplay();
