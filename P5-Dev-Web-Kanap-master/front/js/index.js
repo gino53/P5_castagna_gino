@@ -13,29 +13,18 @@ const displayProducts = async () => {
       
       const clone = document.importNode(template.content, true);
 
-      //<a>
-      const tagA = clone.querySelector("a");
-      tagA.href = `./product.html?id=${product._id}`;
-      //
-
-      //<img>
+      clone.querySelector("a").setAttribute("href", `./product.html?id=${product._id}`);
+  
       const img = clone.querySelector("img");
-      img.src = `${product.imageUrl}`;
-      img.alt = `${product.altTxt}`;
-      //
+      img.setAttribute("src", `${product.imageUrl}`);
+      img.setAttribute("alt", `${product.altTxt}`);
 
-      //<h3>
-      const tagH3 = clone.querySelector(".productName");
-      tagH3.textContent = `${product.name}`;
-      //
+      clone.querySelector(".productName").textContent = `${product.name}`;
 
-      //<p>
-      const tagP = clone.querySelector(".productDescription");
-      tagP.textContent = `${product.description}`;
-      //
-
+      clone.querySelector(".productDescription").textContent = `${product.description}`;
+   
       section.appendChild(clone);
-   })
+   });
 };
 
 displayProducts();
