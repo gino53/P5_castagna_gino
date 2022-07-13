@@ -6,7 +6,6 @@ async function fetchProduct() {
 
 async function displayProduct() {
     const product = await fetchProduct();
-    console.log(product);
 
     document.querySelector("title").textContent = `${product.name}`;
 
@@ -36,25 +35,17 @@ async function displayProduct() {
         if (quantityValue.value > 0 && quantityValue.value <= 100 && !!colorValue.value) {
 
             const productDetail = {
-                id: `${product._id}`,
+                ...product,
                 color: colors.value,
                 quantity: +quantity.value
             };
 
-            let cart = JSON.parse(localStorage.getItem("cart"));
+            let cart = JSON.parse(localStorage.getItem("cart")) || [];
 
-            if (cart != null) {
-                let foundProduct = cart.find(cart => cart.id === productDetail.id && cart.color === productDetail.color);
+            let foundProduct = cart.find(cart => cart.id === productDetail._id && cart.color === productDetail.color);
 
-                if (foundProduct !== undefined) {
-                    foundProduct.quantity = parseInt(productDetail.quantity) + parseInt(foundProduct.quantity);
-                } else {
-                    cart.push(productDetail);
-                }
-            } else {
-                cart = [];
-                cart.push(productDetail);
-            }
+            foundProduct !== undefined ? foundProduct.quantity = +productDetail.quantity + +foundProduct.quantity : cart.push(productDetail);
+
             localStorage.setItem("cart", JSON.stringify(cart));
         }
     });
