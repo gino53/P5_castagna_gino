@@ -42,11 +42,13 @@ async function displayProduct() {
 
             let cart = JSON.parse(localStorage.getItem("cart")) || [];
 
-            let foundProduct = cart.find(cart => cart.id === productDetail._id && cart.color === productDetail.color);
+            let foundProduct = cart.find(cart => cart.id === productDetail.id && cart.color === productDetail.color);
 
             foundProduct !== undefined ? foundProduct.quantity = +productDetail.quantity + +foundProduct.quantity : cart.push(productDetail);
 
             localStorage.setItem("cart", JSON.stringify(cart));
+
+            alert("Produit ajouté au panier.");
         }
     });
 }
