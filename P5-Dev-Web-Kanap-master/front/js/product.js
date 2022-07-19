@@ -10,8 +10,8 @@ async function displayProduct() {
     document.querySelector("title").textContent = `${product.name}`;
 
     const img = document.createElement("img");
-    img.setAttribute('src', `${product.imageUrl}`);
-    img.setAttribute('alt', `${product.altTxt}`);
+    img.setAttribute("src", `${product.imageUrl}`);
+    img.setAttribute("alt", `${product.altTxt}`);
     document.querySelector("#img").appendChild(img);
 
     document.querySelector("#title").textContent = `${product.name}`;
@@ -22,7 +22,7 @@ async function displayProduct() {
 
     product.colors.forEach(color => {
         const option = document.createElement("option");
-        option.setAttribute('value', `${color}`);
+        option.setAttribute("value", `${color}`);
         option.textContent = `${color}`;
         document.querySelector("#colors").appendChild(option);
     });

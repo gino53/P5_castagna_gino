@@ -24,8 +24,8 @@ function displayCart () {
         //article
         let art = document.createElement("article");
         art.classList.add("cart__item");
-        art.setAttribute('data-id', productId);
-        art.setAttribute('data-color', productColor);
+        art.setAttribute("data-id", productId);
+        art.setAttribute("data-color", productColor);
         document.querySelector("#cart__items").appendChild(art);
 
         //image
@@ -34,8 +34,8 @@ function displayCart () {
         art.appendChild(divImg);
 
         const img = document.createElement("img");
-        img.setAttribute('src', `${product.imageUrl}`);
-        img.setAttribute('alt', `${product.altTxt}`);
+        img.setAttribute("src", `${product.imageUrl}`);
+        img.setAttribute("alt", `${product.altTxt}`);
         divImg.appendChild(img);
 
         const divItem = document.createElement("div");
@@ -77,12 +77,12 @@ function displayCart () {
         divQty.appendChild(quantity);
 
         const inputQty = document.createElement("input");
-        inputQty.setAttribute('type', "number");
+        inputQty.setAttribute("type", "number");
         inputQty.classList.add("itemQuantity");
-        inputQty.setAttribute('name', "itemQuantity");
-        inputQty.setAttribute('min', "1");
-        inputQty.setAttribute('max', "100");
-        inputQty.setAttribute('value', product.quantity);
+        inputQty.setAttribute("name", "itemQuantity");
+        inputQty.setAttribute("min", "1");
+        inputQty.setAttribute("max", "100");
+        inputQty.setAttribute("value", product.quantity);
         divQty.appendChild(inputQty);
 
         inputQty.addEventListener("change", (event) => {
@@ -145,8 +145,8 @@ function displayCart () {
         const settings = {
             method: "POST",
             headers: {
-                Accept: 'application/json',
-                'Content-Type': 'application/json'
+                Accept: "application/json",
+                "Content-Type": "application/json"
             },
             body: JSON.stringify({
                 contact,
