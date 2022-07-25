@@ -111,21 +111,19 @@ function displayCart () {
     updateTotalPriceAndQuantity();
 
     //order
-    const order = async () => {
+    document.querySelector("#order").addEventListener("click", async () => {
 
-        const searchParams = new URLSearchParams(location.search);
+        const firstName = document.querySelector("#firstName").value;
+        const lastName = document.querySelector("#lastName").value;
+        const address = document.querySelector("#address").value;
+        const city = document.querySelector("#city").value;
 
-        const firstName = searchParams.get("firstName");
-        const lastName = searchParams.get("lastName");
-        const address = searchParams.get("address");
-        const city = searchParams.get("city");
-
-        const email = searchParams.get("email");
-        const emailError = document.getElementById("emailErrorMsg");
-        const mailRegex = /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/;
+        const email = document.querySelector("#email").value;
+        const emailError = document.querySelector("#emailErrorMsg");
+        const regex = /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/;
         let error = false;
         if (email) {
-            if (!email.match(mailRegex)) {
+            if (!email.match(regex)) {
             emailError.textContent = "Adresse email invalide.";
             error = true;
             }
@@ -170,11 +168,7 @@ function displayCart () {
         }
 
         location.href = `confirmation.html?orderId=${order.orderId}`;
-    }
-
-    if (location.search) {
-        order()
-    }
+    });
 }
 
 displayCart();
