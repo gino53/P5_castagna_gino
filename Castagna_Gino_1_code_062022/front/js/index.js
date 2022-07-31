@@ -1,6 +1,8 @@
+//Requête vers l'API pour récupérer tout les produits et leurs caractèristiques
 const fetchProducts = async () => fetch("http://localhost:3000/api/products")
    .then((res) => res.json());
 
+//Injection des données des produits dans la page HTML
 const displayProducts = async () => {
    
    const products = await fetchProducts();
