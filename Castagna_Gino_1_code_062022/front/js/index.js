@@ -11,6 +11,7 @@ const displayProducts = async () => {
 
    const template = document.querySelector("#productTemplate");
 
+   //Boucle pour chaque produit
    products.forEach((product) => {
       
       const clone = document.importNode(template.content, true);
