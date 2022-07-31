@@ -1,3 +1,4 @@
+//Calcul du prix et de la quantité total
 function updateTotalPriceAndQuantity() {
     const products = JSON.parse(localStorage.getItem("cart"));
 
@@ -15,7 +16,8 @@ function updateTotalPriceAndQuantity() {
 
 function displayCart () {
     const products = JSON.parse(localStorage.getItem("cart"));
-
+    
+    //Injection pour chaque produit des caractéristiques dans la page HTML
     products.forEach(product => {
         
         let productId = product._id;
@@ -85,6 +87,7 @@ function displayCart () {
         inputQty.setAttribute("value", product.quantity);
         divQty.appendChild(inputQty);
 
+        //Au click, la quantité et le prix total change par rapport à la valeur de l'input
         inputQty.addEventListener("change", (event) => {
             product.quantity = +event.target.value;
             localStorage.cart = JSON.stringify(products);
@@ -100,7 +103,8 @@ function displayCart () {
         btnDlt.classList.add("deleteItem");
         btnDlt.textContent = "Supprimer";
         divDlt.appendChild(btnDlt);
-
+        
+        //Au click, le produit est supprimer et la quantité et le prix total change
         divDlt.addEventListener("click", () => {
             localStorage.setItem("cart", JSON.stringify(products.filter(product => product._id !== productId || product.color !== productColor)));
             divDlt.closest("article").remove();
@@ -118,6 +122,7 @@ function displayCart () {
         const address = document.querySelector("#address").value;
         const city = document.querySelector("#city").value;
 
+        //Validation de l'email avec Regex
         const email = document.querySelector("#email").value;
         const emailError = document.querySelector("#emailErrorMsg");
         const regex = /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/;
@@ -132,6 +137,7 @@ function displayCart () {
             return;
         }
 
+        //Création objet contact
         const contact = {
             firstName,
             lastName,
@@ -139,7 +145,8 @@ function displayCart () {
             city,
             email
         };
-
+        
+        //Envoie d'une requête POST à l'API
         const settings = {
             method: "POST",
             headers: {
