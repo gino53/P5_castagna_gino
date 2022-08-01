@@ -1,11 +1,15 @@
-//Récupération de l'ID dans l'adresse du navigateur et des caractéristiques du produit choisi
+/**
+ * Récupération de l'ID dans l'adresse du navigateur et des caractéristiques du produit choisi
+ */
 async function fetchProduct() {
     const productId = new URL(window.location).searchParams.get("id");
     const res = await fetch(`http://localhost:3000/api/products/${productId}`);
     return res.json();
 };
 
-//Injection des données des produits dans la page HTML
+/**
+ * Injection des données des produits dans la page HTML
+ */
 async function displayProduct() {
     const product = await fetchProduct();
 
