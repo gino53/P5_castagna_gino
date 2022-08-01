@@ -26,7 +26,7 @@ async function displayProduct() {
 
     document.querySelector("#description").textContent = `${product.description}`;
 
-    //Boucle pour chaque couleur disponible du produit
+    // Boucle pour chaque couleur disponible du produit
     product.colors.forEach(color => {
         const option = document.createElement("option");
         option.setAttribute("value", `${color}`);
