@@ -44,7 +44,7 @@ async function displayProduct() {
 
             // Création d'un objet produit
             const productDetail = {
-                ...product,
+                _id: product._id,
                 color: colors.value,
                 quantity: +quantity.value
             };

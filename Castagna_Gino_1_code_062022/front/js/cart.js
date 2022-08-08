@@ -1,15 +1,21 @@
+async function fetchProduct(productId) {
+    const res = await fetch(`http://localhost:3000/api/products/${productId}`);
+    return res.json();
+};
+
 /**
  * Calcul du prix et de la quantité total
  */
-function updateTotalPriceAndQuantity() {
+async function updateTotalPriceAndQuantity() {
     const products = JSON.parse(localStorage.getItem("cart"));
 
     let totalQty = 0;
     let totalPrice = 0;
 
     for (let i in products) {
+        const apiProduct = await fetchProduct(products[i]._id);
         totalQty += products[i].quantity;
-        totalPrice += products[i].price * products[i].quantity;
+        totalPrice += apiProduct.price * products[i].quantity;
     }
 
     document.querySelector("#totalQuantity").textContent = totalQty;
@@ -19,12 +25,18 @@ function updateTotalPriceAndQuantity() {
 /**
  * Injection des données produits dans la page HTML, contrôle bouton supprimer et quantité, contrôle du formulaire
  */
-function displayCart () {
+function displayCart() {
     const products = JSON.parse(localStorage.getItem("cart"));
-    
+
     // Injection pour chaque produit des caractéristiques dans la page HTML
-    products.forEach(product => {
-        
+    products.forEach(async cartProduct => {
+        const apiProduct = await fetchProduct(cartProduct._id);
+
+        const product = {
+            ...cartProduct,
+            ...apiProduct
+        };
+
         let productId = product._id;
         let productColor = product.color;
 
@@ -94,7 +106,7 @@ function displayCart () {
 
         // Au click, la quantité et le prix total change par rapport à la valeur de l'input
         inputQty.addEventListener("change", (event) => {
-            product.quantity = +event.target.value;
+            cartProduct.quantity = +event.target.value;
             localStorage.cart = JSON.stringify(products);
             updateTotalPriceAndQuantity();
         });
@@ -108,7 +120,7 @@ function displayCart () {
         btnDlt.classList.add("deleteItem");
         btnDlt.textContent = "Supprimer";
         divDlt.appendChild(btnDlt);
-        
+
         // Au click, le produit est supprimer et la quantité et le prix total change
         divDlt.addEventListener("click", () => {
             localStorage.setItem("cart", JSON.stringify(products.filter(product => product._id !== productId || product.color !== productColor)));
@@ -118,69 +130,132 @@ function displayCart () {
     });
 
     updateTotalPriceAndQuantity();
+}
 
+/**
+ * Formulaire, contrôle inputs, requête POST et redirection vers la page confirmation
+ */
+function userForm() {
     // Au click, si les informations sont corrects, renvoie sur la page de confirmation
     document.querySelector("#order").addEventListener("click", async () => {
 
-        const firstName = document.querySelector("#firstName").value;
-        const lastName = document.querySelector("#lastName").value;
-        const address = document.querySelector("#address").value;
-        const city = document.querySelector("#city").value;
-
-        // Validation de l'email avec Regex
-        const email = document.querySelector("#email").value;
-        const emailError = document.querySelector("#emailErrorMsg");
-        const regex = /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/;
+        const products = JSON.parse(localStorage.getItem("cart"));
         let error = false;
-        if (email) {
-            if (!email.match(regex)) {
-            emailError.textContent = "Adresse email invalide.";
-            error = true;
+
+        // Validation des inputs avec Regex
+        const firstName = document.querySelector("#firstName").value;
+        const firstNameError = document.querySelector("#firstNameErrorMsg");
+        const firstNameRegex = /(^[a-zA-Z][a-zA-Z\s]{0,20}[a-zA-Z]$)/;
+        if (firstName) {
+            if (!firstName.match(firstNameRegex)) {
+                firstNameError.textContent = "Prénom invalide.";
+                error = true;
             }
         }
         if (error) {
             return;
         }
 
-        // Création objet contact
-        const contact = {
-            firstName,
-            lastName,
-            address,
-            city,
-            email
-        };
-        
-        // Envoie d'une requête POST à l'API
-        const settings = {
-            method: "POST",
-            headers: {
-                Accept: "application/json",
-                "Content-Type": "application/json"
-            },
-            body: JSON.stringify({
-                contact,
-                products: products.map(product => product._id)
-            })
-        };
-
-        const response = await fetch("http://localhost:3000/api/products/order", settings);
-        if (!response.ok) {
-            return
+        const lastName = document.querySelector("#lastName").value;
+        const lastNameError = document.querySelector("#lastNameErrorMsg");
+        const lastNameRegex = /(^[a-zA-Z][a-zA-Z\s]{0,20}[a-zA-Z]$)/;
+        if (lastName) {
+            if (!lastName.match(lastNameRegex)) {
+                lastNameError.textContent = "Nom invalide.";
+                error = true;
+            }
+        }
+        if (error) {
+            return;
         }
 
-        const responseText = await response.text();
-        if (!responseText) {
-            return
+        const address = document.querySelector("#address").value;
+        const addressError = document.querySelector("#addressErrorMsg");
+        const addressRegex = /^([1-9][0-9]*(?:-[1-9][0-9]*)*)[\s,-]+(?:(bis|ter|qua)[\s,-]+)?([\w]+[\-\w]*)[\s,]+([-\w].+)$/;
+        if (address) {
+            if (!address.match(addressRegex)) {
+                addressError.textContent = "L'adresse doit comprendre un numéro, la voie et le nom de la voie";
+                error = true;
+            }
         }
-        
-        const order = await JSON.parse(responseText);
-        if (!order.orderId) {
-            return
+        if (error) {
+            return;
         }
 
-        location.href = `confirmation.html?orderId=${order.orderId}`;
+        const city = document.querySelector("#city").value;
+        const cityError = document.querySelector("#cityErrorMsg");
+        const cityRegex = /(^[a-zA-Z][a-zA-Z\s]{0,20}[a-zA-Z]$)/;
+        if (city) {
+            if (!city.match(cityRegex)) {
+                cityError.textContent = "Ville invalide.";
+                error = true;
+            }
+        }
+        if (error) {
+            return;
+        }
+
+        const email = document.querySelector("#email").value;
+        const emailError = document.querySelector("#emailErrorMsg");
+        const emailRegex = /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/;
+        if (email) {
+            if (!email.match(emailRegex)) {
+                emailError.textContent = "Adresse email invalide.";
+                error = true;
+            }
+        }
+        if (error) {
+            return;
+        }
+
+        if (products != null && products?.length > 0) {
+            // Création objet contact
+            if (firstName, lastName, address, city, email) {
+                const contact = {
+                    firstName,
+                    lastName,
+                    address,
+                    city,
+                    email
+                };
+
+                // Envoie d'une requête POST à l'API
+                const settings = {
+                    method: "POST",
+                    headers: {
+                        Accept: "application/json",
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify({
+                        contact,
+                        products: products.map(product => product._id)
+                    })
+                };
+
+                const response = await fetch("http://localhost:3000/api/products/order", settings);
+                if (!response.ok) {
+                    return
+                }
+
+                const responseText = await response.text();
+                if (!responseText) {
+                    return
+                }
+
+                const order = await JSON.parse(responseText);
+                if (!order.orderId) {
+                    return
+                }
+
+                location.href = `confirmation.html?orderId=${order.orderId}`;
+            } else {
+                alert("Veuillez remplir le formulaire");
+            }
+        } else {
+            alert("Votre panier est vide");
+        }
     });
 }
 
+userForm();
 displayCart();
