@@ -6,21 +6,7 @@ async function fetchProduct(productId) {
 /**
  * Calcul du prix et de la quantité total
  */
-async function updateTotalPriceAndQuantity() {
-    const products = JSON.parse(localStorage.getItem("cart"));
 
-    let totalQty = 0;
-    let totalPrice = 0;
-
-    for (let i in products) {
-        const apiProduct = await fetchProduct(products[i]._id);
-        totalQty += products[i].quantity;
-        totalPrice += apiProduct.price * products[i].quantity;
-    }
-
-    document.querySelector("#totalQuantity").textContent = totalQty;
-    document.querySelector("#totalPrice").textContent = totalPrice;
-}
 
 /**
  * Injection des données produits dans la page HTML, contrôle bouton supprimer et quantité, contrôle du formulaire
@@ -108,7 +94,14 @@ function displayCart() {
         inputQty.addEventListener("change", (event) => {
             cartProduct.quantity = +event.target.value;
             localStorage.cart = JSON.stringify(products);
-            updateTotalPriceAndQuantity();
+            let totalQty = 0;
+            let totalPrice = 0;
+            for (let i in products) {
+                totalQty += products[i].quantity;
+                totalPrice += apiProduct.price * products[i].quantity;
+            }
+            document.querySelector("#totalQuantity").textContent = totalQty;
+            document.querySelector("#totalPrice").textContent = totalPrice;
         });
 
         // Delete
@@ -125,11 +118,28 @@ function displayCart() {
         divDlt.addEventListener("click", () => {
             localStorage.setItem("cart", JSON.stringify(products.filter(product => product._id !== productId || product.color !== productColor)));
             divDlt.closest("article").remove();
-            updateTotalPriceAndQuantity();
-        });
-    });
+            let totalQty = 0;
+            let totalPrice = 0;
+            for (let i in products) {
+                totalQty += products[i].quantity;
+                totalPrice += apiProduct.price * products[i].quantity;
+            }
+            document.querySelector("#totalQuantity").textContent = totalQty;
+            document.querySelector("#totalPrice").textContent = totalPrice;
+        }
+        );
 
-    updateTotalPriceAndQuantity();
+        let totalQty = 0;
+        let totalPrice = 0;
+
+        for (let i in products) {
+            totalQty += products[i].quantity;
+            totalPrice += apiProduct.price * products[i].quantity;
+        }
+
+        document.querySelector("#totalQuantity").textContent = totalQty;
+        document.querySelector("#totalPrice").textContent = totalPrice;
+    });
 }
 
 /**
@@ -148,7 +158,7 @@ function userForm() {
         const firstNameRegex = /(^[a-zA-Z][a-zA-Z\s]{0,20}[a-zA-Z]$)/;
         if (firstName) {
             if (!firstName.match(firstNameRegex)) {
-                firstNameError.textContent = "Prénom invalide.";
+                firstNameError.textContent = "Le prénom doit contenir entre 2-20 caractères et ne doit pas contenir de caractères spéciaux";
                 error = true;
             }
         }
@@ -161,7 +171,7 @@ function userForm() {
         const lastNameRegex = /(^[a-zA-Z][a-zA-Z\s]{0,20}[a-zA-Z]$)/;
         if (lastName) {
             if (!lastName.match(lastNameRegex)) {
-                lastNameError.textContent = "Nom invalide.";
+                lastNameError.textContent = "Le nom de famille doit contenir entre 2-20 caractères et ne doit pas contenir de caractères spéciaux";
                 error = true;
             }
         }
@@ -174,7 +184,7 @@ function userForm() {
         const addressRegex = /^([1-9][0-9]*(?:-[1-9][0-9]*)*)[\s,-]+(?:(bis|ter|qua)[\s,-]+)?([\w]+[\-\w]*)[\s,]+([-\w].+)$/;
         if (address) {
             if (!address.match(addressRegex)) {
-                addressError.textContent = "L'adresse doit comprendre un numéro, la voie et le nom de la voie";
+                addressError.textContent = "L'adresse doit comprendre le numéro, la voie et le nom de la voie";
                 error = true;
             }
         }
@@ -187,7 +197,7 @@ function userForm() {
         const cityRegex = /(^[a-zA-Z][a-zA-Z\s]{0,20}[a-zA-Z]$)/;
         if (city) {
             if (!city.match(cityRegex)) {
-                cityError.textContent = "Ville invalide.";
+                cityError.textContent = "Le nom de la ville doit contenir entre 2-20 caractères et ne doit pas contenir de caractères spéciaux";
                 error = true;
             }
         }
